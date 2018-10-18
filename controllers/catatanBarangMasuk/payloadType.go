@@ -1,4 +1,4 @@
-package types
+package catatanBarangMasuk
 
 // Ref: https://golang.org/pkg/encoding/csv/
 

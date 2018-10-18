@@ -1,4 +1,4 @@
-package types
+package laporanPenjualan
 
 // Ref: https://golang.org/pkg/encoding/csv/
 
