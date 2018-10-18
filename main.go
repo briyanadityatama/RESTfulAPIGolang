@@ -1,54 +1,49 @@
 package main
 
 import (
-	"encoding/csv"
-	"encoding/json"
-	"os"
+	"fmt"
+	"net/http"
 
-	log "github.com/Sirupsen/logrus"
-	"github.com/briyanadityatama/RESTfulAPIGolang/types"
+	"github.com/briyanadityatama/RESTfulAPIGolang/controllers/catatanBarangKeluar"
+	"github.com/briyanadityatama/RESTfulAPIGolang/controllers/catatanBarangMasuk"
+	"github.com/briyanadityatama/RESTfulAPIGolang/controllers/catatanJumlahBarang"
+	"github.com/briyanadityatama/RESTfulAPIGolang/controllers/laporanNilaiBarang"
+	"github.com/briyanadityatama/RESTfulAPIGolang/controllers/laporanPenjualan"
+	"github.com/go-chi/chi"
 )
 
-func main() {
-	db, err := readJSONFile("")
-	if nil != err {
-		log.Fatalln(err)
-	}
-
-	f, err := os.Create("")
-	if nil != err {
-		log.Fatalln(err)
-	}
-
-	defer f.Close()
-
-	w := csv.NewWriter(f)
-
-	w.Write(types.GetHeader())
-	for _, user := range db.Users {
-		ss := user.EncodeAsStrings()
-		w.Write(ss)
-	}
-
-	w.Flush()
-
-	err = w.Error()
-	if nil != err {
-		log.Fatalln(err)
-	}
+// APIServer ...
+type APIServer struct {
+	Router *chi.Mux
 }
 
-func readJSONFile(s string) (db *types.UserDb, err error) {
-	f, err := os.Open(s)
-	if nil != err {
-		return nil, err
+// Initialize , initialize api server
+func (app *APIServer) Initialize() {
+	app.Router = chi.NewRouter()
+	catatanBarangKeluarRouter := catatanBarangKeluar.Routers()
+	catatanBarangMasukRouter := catatanBarangMasuk.Routers()
+	catatanJumlahBarangRouter := catatanJumlahBarang.Routers()
+	laporanNilaiBarangRouter := laporanNilaiBarang.Routers()
+	laporanPenjualanRouter := laporanPenjualan.Routers()
+
+	app.Router.Mount("/catatanBarangKeluar", catatanBarangKeluarRouter)
+	app.Router.Mount("/catatanBarangMasuk", catatanBarangMasukRouter)
+	app.Router.Mount("/catatanJumlahBarang", catatanJumlahBarangRouter)
+	app.Router.Mount("/laporanNilaiBarang", laporanNilaiBarangRouter)
+	app.Router.Mount("/laporanPenjualan", laporanPenjualanRouter)
+}
+
+// Run , run api server
+func (app *APIServer) Run(addr string) {
+	err := http.ListenAndServe(addr, app.Router)
+	if err != nil {
+		fmt.Print(err)
 	}
-	defer f.Close()
+	fmt.Printf("Server runs on port %s\n", addr)
+}
 
-	var dec = json.NewDecoder(f)
-
-	db = new(types.UserDb)
-	dec.Decode(db)
-
-	return
+func main() {
+	apiServer := APIServer{}
+	apiServer.Initialize()
+	apiServer.Run(":8080")
 }
