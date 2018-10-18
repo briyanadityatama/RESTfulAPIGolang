@@ -47,9 +47,9 @@ type (
 	}
 
 	catatanBarangMasukDb struct {
-		XMLName              xml.Name             `json:"-" xml:"catatanBarangKeluars"`
-		Type                 string               `json:"type,omitempty" xml:"type"`
-		CatatanBarangKeluars []CatatanBarangMasuk `json:"catatanBarangKeluars,omitempty" xml:"catatanBarangMasuk"`
+		XMLName            xml.Name             `json:"-" xml:"catatanBarangMasuk"`
+		Type               string               `json:"type,omitempty" xml:"type"`
+		CatatanBarangMasuk []CatatanBarangMasuk `json:"catatanBarangMasuk,omitempty" xml:"catatanBarangMasuk"`
 	}
 )
 

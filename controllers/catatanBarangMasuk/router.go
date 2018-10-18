@@ -1,4 +1,4 @@
-package catatanBarangKeluar
+package catatanBarangMasuk
 
 import (
 	"encoding/csv"
@@ -13,18 +13,18 @@ import (
 // Routers , return router constructed for auth purpose
 func Routers() http.Handler {
 	router := chi.NewRouter()
-	router.Get("/catatanBarangKeluar/upload", GetCatatanBarangKeluar)
-	router.Post("/catatanBarangKeluar/input", PostCatatanBarangKeluar)
+	router.Get("/catatanBarangMasuk/upload", GetCatatanBarangMasuk)
+	router.Post("/catatanBarangMasuk/input", PostCatatanBarangMasuk)
 	return router
 }
 
 func GetCatatanBarangKeluar() {
-	db, err := readJSONFile("../data/CatatanBarangKeluar.json")
+	db, err := readJSONFile("../data/CatatanBarangMasuk.json")
 	if nil != err {
 		log.Fatalln(err)
 	}
 
-	f, err := os.Create("../data/CatatanBarangKeluar.csv")
+	f, err := os.Create("../data/CatatanBarangMasuk.csv")
 	if nil != err {
 		log.Fatalln(err)
 	}
@@ -34,8 +34,8 @@ func GetCatatanBarangKeluar() {
 	w := csv.NewWriter(f)
 
 	w.Write(types.GetHeader())
-	for _, catatanBarangKeluar := range db.CatatanBarangKeluars {
-		ss := catatanBarangKeluar.EncodeAsStrings()
+	for _, catatanBarangMasuk := range db.CatatanBarangMasuk {
+		ss := catatanBarangMasuk.EncodeAsStrings()
 		w.Write(ss)
 	}
 
@@ -47,7 +47,7 @@ func GetCatatanBarangKeluar() {
 	}
 }
 
-func readJSONFile(s string) (db *controllers.CatatanBarangKeluarDb, err error) {
+func readJSONFile(s string) (db *controllers.CatatanBarangMasukDb, err error) {
 	f, err := os.Open(s)
 	if nil != err {
 		return nil, err
@@ -56,7 +56,7 @@ func readJSONFile(s string) (db *controllers.CatatanBarangKeluarDb, err error) {
 
 	var dec = json.NewDecoder(f)
 
-	db = new(controllers.CatatanBarangKeluarDb)
+	db = new(controllers.CatatanBarangMasukDb)
 	dec.Decode(db)
 
 	return
