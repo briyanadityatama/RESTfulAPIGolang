@@ -31,7 +31,7 @@ import (
 // 	return nil
 // }
 
-var header = []string{`waktu`, `sku`, `nama_barang`, `jumlah_keluar`, `harga_jual`, `total`, `catatan`}
+var headerBarangKeluar = []string{`waktu`, `sku`, `nama_barang`, `jumlah_keluar`, `harga_jual`, `total`, `catatan`}
 
 type (
 	CatatanBarangKeluar struct {
@@ -51,8 +51,8 @@ type (
 	}
 )
 
-func GetHeader() []string {
-	return header
+func GetHeaderBarangKeluar() []string {
+	return headerBarangKeluar
 }
 
 func (catatanBarangKeluar CatatanBarangKeluar) EncodeAsStrings() (ss []string) {
